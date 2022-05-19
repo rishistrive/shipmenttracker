@@ -1,38 +1,102 @@
 {% extends "shipment/base.html" %}
-{% block content %}
+{% load crispy_forms_tags %}
 
-{% for shipment in shipments %}
-        <article class="media content-section">
-        <table>
-          <div >
-            <div >
-                <thead>
-                <th class="mr-5">Product</th>
-                <th class="mr-5">Order Date</th>
-                <th class="mr-5">Shipping Address</th>
-                <th class="mr-5">Expected Delivery Date</th>
-                <th class="mr-5">Amount</th>
-                <th class="mr-5">Supplier</th>
-                <th class="mr-5">Customer</th> 
-                <th class="mr-5">Status</th> 
-                </thead>
-                <tbody>
-                    <tr>
-             <td> <h6 class="mr-5">{{ user.shipment.product_name.name }}</h6></td>
-            <td><h6 class="mr-5">{{ shipment.order_date }}</h6></td>
-            <td><h6 class="mr-5">{{ shipment.shipping_address }}</h6>
-            <td><h6 class="mr-5">{{ shipment.delivery_date|date:"F d, Y" }}</h6>
-            <td><h6 class="mr-5">{{ shipment.order_amount }}</h6></td>
-            <td><h6 class="mr-5">{{ shipment.supplier }}</h6></td>
-            {% comment %} {% if  %}{% endif %} {% endcomment %}
-            <td> <h6 class="mr-5">{{ shipment.customer }}</h6></td>
-            <td> <h6 class="mr-5">{{ shipment.status }}</h6></td>
-            </div>
-            </tr>
-            </tbody>
-        </table>
+{% block content %}
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
+  data-whatever="@mdo">Change Widget</button>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="" method="post">
+          {% csrf_token %}
+          {{form|crispy}}
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Set Widget</button>
           </div>
-        </article>
-    {% endfor %}
-   
+      </div>
+    </div>
+  </div>
+</div>
+<br>
+<br>
+<div>
+  {% for shipment in shipments %}
+  <article class="media content-section">
+    <table>
+      <div>
+        <div>
+          <thead>
+            <th class="mr-5">Product</th>
+            <th class="mr-5">Order Date</th>
+            <th class="mr-5">Shipping Address</th>
+            <th class="mr-5">Expected Delivery Date</th>
+            <th class="mr-5">Amount</th>
+            <th class="mr-5">Supplier</th>
+            <th class="mr-5">Customer</th>
+            <th class="mr-5">Status</th>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <h6 class="mr-5">{{ shipment.product_name.name }}</h6>
+              </td>
+              <td>
+                <h6 class="mr-5">{{ shipment.order_date }}</h6>
+              </td>
+              <td>
+                <h6 class="mr-5">{{ shipment.shipping_address }}</h6>
+              <td>
+                <h6 class="mr-5">{{ shipment.delivery_date|date:"F d, Y" }}</h6>
+              <td>
+                <h6 class="mr-5">{{ shipment.order_amount }}</h6>
+              </td>
+              <td>
+                <h6 class="mr-5">{{ shipment.supplier }}</h6>
+              </td>
+              {% comment %} {% if %}{% endif %} {% endcomment %}
+              <td>
+                <h6 class="mr-5">{{ shipment.customer }}</h6>
+              </td>
+              <td>
+                <h6 class="mr-5">{{ shipment.status }}</h6>
+              </td>
+        </div>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</article>
+{% endfor %}
+
+{% if value == 1 %}
+{% include 'charts/charts.html' %}
+{% comment %} {% with table_data1 as shipments %}
+{% include 'lists/lists.html' %}
+{% endwith %} {% endcomment %}
+
+{% elif value == 2 %}
+{% include 'info/info.html' %}
+
+{% elif value == 3 %}
+{% include 'lists/lists.html' %}
+
+{% elif value == 4 %}
+{% include 'stats/stats.html' %}
+
+{% else %}
+<h1>Unknown Widget</h1>
+
+{% endif %}
+
+{% include 'shipment/footer.html' %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
 {% endblock content %}
