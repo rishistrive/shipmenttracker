@@ -1,8 +1,8 @@
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from .models import UserConfig, Widgets
+from django.http import HttpResponse
 
 
 @login_required
@@ -18,6 +18,8 @@ def redirecttowidget(request, *args, **kwargs):
             return redirect(reverse("lists"))
         if widget.name == "Statistics":
             return redirect(reverse("stats"))
+    else:
+        return HttpResponse("That widget type doesn't exist.")
 
 
 @login_required
@@ -29,7 +31,6 @@ def config_widget(request):
     var = UserConfig.objects.create(user=request.user)
     var.widget.set(selected_widgets)
     var.save()
-    print("dddd", request.GET.getlist("checkbox-lists"))
     return render(request, "shipment/config.html", context)
 
 

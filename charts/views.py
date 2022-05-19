@@ -7,12 +7,10 @@ def pie_chart(request):
     data = []
     supplier = request.user.is_supplier
     if not supplier:
-        print("customer")
         shipments = Shipment.objects.filter(customer=request.user).prefetch_related()
         for shipment in shipments:
             labels.append(shipment.product_name.name)
             data.append(shipment.quantity)
-        print(data)
 
         return render(
             request,
@@ -27,7 +25,6 @@ def pie_chart(request):
         for shipment in shipments:
             labels.append(shipment.product_name.name)
             data.append(shipment.order_amount)
-        print(data)
 
         return render(
             request,
