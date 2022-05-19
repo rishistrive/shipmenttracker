@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from .models import Product, Shipment, User, UserConfig, Widgets
 
 
@@ -27,10 +28,11 @@ class ShipmentAdmin(admin.ModelAdmin):
 
 admin.site.register(Shipment, ShipmentAdmin)
 
-class UserConfAdmin(admin.ModelAdmin):
-    list_display = ["id", "user", "widget", "status"]
+# class UserConfAdmin(admin.ModelAdmin):
+#     list_display = ["id", "user", "widget", "status"]
 
-    class Meta:
-        model = UserConfig
+#     class Meta:
+#         model = UserConfig
 
-admin.site.register(UserConfig, UserConfAdmin)
+admin.site.register(UserConfig)
+admin.site.register(Widgets)
