@@ -1,60 +1,50 @@
-from django.shortcuts import redirect, render
-from .forms import WidgetsForm
-
-from shipment.widgets_values import WidgetValues
-from .models import Shipment
-from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect, render
+from django.urls import reverse
+from .models import UserConfig, Widgets
 
 
+@login_required
+def redirecttowidget(request, *args, **kwargs):
+    widget_id = kwargs.get("widget_id")
+    if widget_id:
+        widget = Widgets.objects.get(id=widget_id)
+        if widget.name == "Chart":
+            return redirect(reverse("charts"))
+        if widget.name == "Info":
+            return redirect(reverse("info"))
+        if widget.name == "List":
+            return redirect(reverse("lists"))
+        if widget.name == "Statistics":
+            return redirect(reverse("stats"))
 
-def post(self, request):
-        form = WidgetsForm(request.POST)
-        if form.is_valid():
-            form.instance.user = self.request.user
-            form.save()
-        return redirect('home')
-    
+
+@login_required
+def config_widget(request):
+    context = {}
+    widgets = Widgets.objects.all()
+    context["widgets"] = widgets
+    selected_widgets = request.GET.getlist("checkbox-lists")
+    var = UserConfig.objects.create(user=request.user)
+    var.widget.set(selected_widgets)
+    var.save()
+    print("dddd", request.GET.getlist("checkbox-lists"))
+    return render(request, "shipment/config.html", context)
 
 
 @login_required
 def check_widget(request):
-    if request.method == 'POST':
-        form = WidgetsForm(request.POST, instance=request.user)
-        if form.is_valid():
-            form.save()
-            widgets = form.cleaned_data.get('widgets')
-            messages.success(request, f'Widget set to {widgets}!')
-    context ={}
-    form = WidgetsForm
-    context['form'] = form
-    supplier = request.user.is_supplier
-    if not supplier:
-        print('customer')
-        shipments = Shipment.objects.filter(customer = request.user).prefetch_related()
-        context['shipments'] = shipments
-    else:
-        shipments = Shipment.objects.filter(supplier=request.user).prefetch_related()
-        context['shipments'] = shipments
-
-    widgets = str(request.user.widgets)
-    if widgets == 'Charts':
-        widgetvalue = WidgetValues.Charts.value
-        context['value'] = widgetvalue
-    elif widgets == 'Info':
-        widgetvalue = WidgetValues.Info.value
-        context['value'] = widgetvalue
-    elif widgets == 'Lists':
-        widgetvalue = WidgetValues.Lists.value
-        context['value'] = widgetvalue
-    elif widgets == 'Statistics':
-        widgetvalue = WidgetValues.Statistics.value
-        context['value'] = widgetvalue
-    else:
-        context['value'] = 'none'
-    return render(request, 'shipment/home.html', context)
+    context = {}
+    try:
+        userwidgets = UserConfig.objects.get(user=request.user).widget.all()
+        context["userwidgets"] = userwidgets
+    except:
+        defaultwidget = Widgets.objects.get(name="Chart")
+        context["defaultwidget"] = defaultwidget
+    return render(request, "shipment/home.html", context)
 
 
 @login_required
 def about(request):
-    return render(request, 'shipment/about.html')
+    return render(request, "shipment/about.html")

@@ -1,4 +1,26 @@
 {% extends "shipment/base.html" %}
 {% block content %}
-    <h1>Info</h1>
+    <h1 class="ml-3" >Info View</h1>
+        {% for shipment in shipments %}
+            <article class="media content-section">
+                <div class="media-body">
+                    <h2><a class="article-title" href="#">Product Name - {{ shipment.product_name.name }}</a></h2>
+                <div class="article-metadata">
+                    <h6 class="mr-2">Order ID - {{ shipment.orderid }}</h6>
+                    {% if request.user.is_customer %}
+                    <h6 class="mr-2">Supplier - {{ shipment.supplier }}</h6>
+                    {% endif %}
+                    {% if request.user.is_supplier %}
+                    <h6 class="mr-2">Customer - {{ shipment.customer }}</h6>
+                    {% endif %}
+                    <h6 class="mr-2" href="#">Expected Delivery Date - {{ shipment.delivery_date|date:"F d, Y" }}</h6>
+                    <h6 class="text-muted">Shipment Status {{ shipment.status }}</h6>
+                </div>
+                
+                <p class="article-content">Shipping Address - {{ shipment.shipping_address }}</p>
+                </div>
+            </article>
+            
+            
+        {% endfor %}
 {% endblock content %}

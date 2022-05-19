@@ -1,8 +1,14 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+
 class Widgets(models.Model):
     name = models.CharField(max_length=20)
+
+
+# class WidgetsForUser(models.Model):
+#     user = models.ForeignKey()
+#     widgets=models.ForeignKey()
 
 
 class Product(models.Model):
@@ -28,6 +34,7 @@ class Shipment(models.Model):
     )
     orderid = models.CharField(max_length=20, unique=True)
     product_name = models.ForeignKey(Product, on_delete=models.CASCADE, default="1")
+    quantity = models.IntegerField(default=1)
     order_date = models.DateTimeField(auto_now_add=True)
     delivery_date = models.DateTimeField()
     status = models.CharField(max_length=20, choices=STATUS, default="Pending")
@@ -46,8 +53,11 @@ class Shipment(models.Model):
 
 class UserConfig(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    widget = models.ForeignKey(Widgets, on_delete=models.CASCADE)
-    status = models.BooleanField(default=False, blank=True)
+    widget = models.ManyToManyField(Widgets)
+    # status = models.BooleanField(default=False, blank=True)
 
 
-
+# class FreindRequest(models.Model):
+#     sender  = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sender")
+#     receiver  = models.ForeignKey(User, on_delete=models.CASCADE, related_name="receiver")
+#     is_active = models.BooleanField(blank=True, null=False, default=True)
