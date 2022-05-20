@@ -1,18 +1,20 @@
 {% extends "shipment/base.html" %}
+{% load crispy_forms_tags %}
 {% block content %}
+<div class="content-section">
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Select View Type</legend>
+            {{ form }}
+        </fieldset>
+        <div class="form-group">
+            <button class="btn btn-outline-info" type="submit">Submit</button>
+        </div>
+    </form>
 
-<h1 class ="ml-5">Please Select Widgets Type</h1>
-<form action="{% url 'config' %}">
-{% for widget in widgets %}
-<div class="custom-control custom-switch" style=" margin-left : 50px; ">
-    <input name="checkbox-lists" value="{{widget.id}}" type="checkbox" class="custom-control-input_{{widget.id}}" id="customSwitch{{forloop.counter}}">
-    <label class="custom-control-label" for="customSwitch{{forloop.counter}}">{{ widget.name }}</label>
+    </div>
+
 </div>
-{% endfor %}
-<button>submit</button>
-
-</form>
-
-
 {% endblock content %}
 

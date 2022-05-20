@@ -5,10 +5,8 @@ from django.db import models
 class Widgets(models.Model):
     name = models.CharField(max_length=20)
 
-
-# class WidgetsForUser(models.Model):
-#     user = models.ForeignKey()
-#     widgets=models.ForeignKey()
+    def __str__(self):
+        return f"{self.name}"
 
 
 class Product(models.Model):
@@ -52,12 +50,5 @@ class Shipment(models.Model):
 
 
 class UserConfig(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    widget = models.ManyToManyField(Widgets)
-    # status = models.BooleanField(default=False, blank=True)
-
-
-# class FreindRequest(models.Model):
-#     sender  = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sender")
-#     receiver  = models.ForeignKey(User, on_delete=models.CASCADE, related_name="receiver")
-#     is_active = models.BooleanField(blank=True, null=False, default=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="userwidget")
+    widget = models.ManyToManyField(Widgets, related_name="userconfig")

@@ -5,18 +5,13 @@
 <h1 class ="ml-5">Select More Widgets In <a href="{% url 'config' %}">Configuration</a></h1>
 {% if userwidgets %}
 {% for widgets in userwidgets %}
-<ul class="nav nav-pills nav-fill" style=" margin-left : 50px; >
+<ul class="nav nav-pills" style=" margin-left : 50px; ">
     <li class="nav-item">
       <a class="nav-link active" href="{% url 'redirect_widget' widgets.id %}">{{ widgets.name }}</a>
     </li>
   </ul>
+  <br>
 {% endfor %}
-{% else %}
-<ul class="nav nav-pills" style=" margin-left : 50px; >
-    <li class="nav-item">
-      <a class="nav-link active" href="{% url 'redirect_widget' defaultwidget.id %}">{{ defaultwidget.name }}</a>
-    </li>
-</ul>
 {% endif %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
 {% endblock content %}
