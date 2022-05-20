@@ -93,24 +93,12 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
         'NAME': 'shipments',
-<<<<<<< HEAD
         'USER': '',
         'PASSWORD': '',
-=======
-        'USER': 'root',
-        'PASSWORD': 'Root@123',
->>>>>>> ebceb8a7964ab8ab5834263b0e3dc7ad0effe4e7
         'HOST': 'localhost',
         'PORT': '3306',
     }
 }
-
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": BASE_DIR / "db.sqlite3",
-#     }
-# }
 
 
 

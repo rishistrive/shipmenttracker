@@ -1,5 +1,4 @@
 {% extends "shipment/base.html" %}
-<<<<<<< HEAD
 {% load crispy_forms_tags %}
 {% block content %}
 <div class="content-section">
@@ -17,22 +16,5 @@
     </div>
 
 </div>
-=======
-{% block content %}
-
-<h1 class ="ml-5">Please Select Widgets Type</h1>
-<form action="{% url 'config' %}">
-{% for widget in widgets %}
-<div class="custom-control custom-switch" style=" margin-left : 50px; ">
-    <input name="checkbox-lists" value="{{widget.id}}" type="checkbox" class="custom-control-input_{{widget.id}}" id="customSwitch{{forloop.counter}}">
-    <label class="custom-control-label" for="customSwitch{{forloop.counter}}">{{ widget.name }}</label>
-</div>
-{% endfor %}
-<button>submit</button>
-
-</form>
-
-
->>>>>>> ebceb8a7964ab8ab5834263b0e3dc7ad0effe4e7
 {% endblock content %}
 

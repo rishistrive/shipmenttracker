@@ -27,15 +27,5 @@ class ShipmentAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Shipment, ShipmentAdmin)
-<<<<<<< HEAD
-=======
-
-# class UserConfAdmin(admin.ModelAdmin):
-#     list_display = ["id", "user", "widget", "status"]
-
-#     class Meta:
-#         model = UserConfig
-
->>>>>>> ebceb8a7964ab8ab5834263b0e3dc7ad0effe4e7
 admin.site.register(UserConfig)
 admin.site.register(Widgets)
