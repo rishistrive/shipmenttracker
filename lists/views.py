@@ -6,9 +6,7 @@ def lists(request):
     supplier = request.user.is_supplier
     if not supplier:
         shipments = request.user.customer.all()
-        context["shipments"] = shipments
     else:
         shipments = request.user.supplier.all()
-        context["shipments"] = shipments
-
+    context["shipments"] = shipments
     return render(request, "lists/lists.html", context)

@@ -1,7 +1,10 @@
+from genericpath import exists
 from django.contrib.auth.decorators import login_required
+from django.db.models import F
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
+
 from shipment.forms import WidgetsForm
 
 from .models import UserConfig, Widgets
@@ -28,13 +31,11 @@ def redirect_to_widget(request, *args, **kwargs):
 def config_widget(request):
     if request.method == "POST":
         form = WidgetsForm(data=request.POST)
-        user_exist = request.user.userwidget.exists()
-        if user_exist:
-            existed_user = UserConfig.objects.get(user=request.user)
-            form = WidgetsForm(request.POST, instance=existed_user)
-            if form.is_valid():
-                form.save()
-            return redirect(reverse("home"))
+        user_config = request.user.userwidget.first()
+        form = WidgetsForm(request.POST, instance=user_config)
+        if form.is_valid():
+            form.save()
+        return redirect(reverse("home"))
     else:
         all_widgets = request.user.userwidget.values_list('widget__id', flat=True)
         form = WidgetsForm(initial={"user": request.user, "widget": all_widgets})
@@ -42,13 +43,14 @@ def config_widget(request):
 
 
 @login_required
-def check_widget(request):
+def dashboard(request):
     context = {}
-    widgets = []
-    user_config = request.user.userwidget.all()
-    if user_config.exists():
-        widgets = user_config.last().widget.all()
-    context["userwidgets"] = widgets or Widgets.objects.filter(name="Chart")
+    user_config = request.user.userwidget.filter(
+        widget__name__isnull=False).annotate(
+            name=F('widget__name'),
+            pk=F('widget__id')
+        ).values('name', 'pk')
+    context["userwidgets"] = user_config if user_config.exists() else Widgets.objects.filter(name="Chart").values('name', 'pk')
     return render(request, "shipment/home.html", context)
 
 
